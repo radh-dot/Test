@@ -46,8 +46,8 @@
             width: 100%;
             max-width: 480px; 
             margin: 0 auto;
-            /* Combines device top safe area (notch space) with standard margins */
-            padding: calc(env(safe-area-inset-top, 0px) + 28px) 10px 40px 10px;
+            /* Combines device top safe area (notch space) with optimized offset to clear status bar overlap */
+            padding: calc(env(safe-area-inset-top, 0px) + 38px) 10px 40px 10px;
             display: flex;
             flex-direction: column;
             align-items: center; 
@@ -302,8 +302,8 @@
 </head>
 <body>
 
-    <!-- Floating Native-Style Close Button -->
-    <button onclick="closeWebView()" class="fixed right-3 z-50 flex items-center justify-center w-9 h-9 bg-white/80 backdrop-blur-md rounded-full shadow-md border border-white/50 active:scale-90 transition-transform select-none" style="top: calc(env(safe-area-inset-top, 0px) + 12px);" aria-label="Close page">
+    <!-- Floating Native-Style Close/Back Button (Pushed further down to stay safe from standard notification/status bar overlays) -->
+    <button onclick="closeWebView()" class="fixed right-3 z-50 flex items-center justify-center w-9 h-9 bg-white/80 backdrop-blur-md rounded-full shadow-md border border-white/50 active:scale-90 transition-transform select-none" style="top: calc(env(safe-area-inset-top, 0px) + 24px);" aria-label="Close page">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-[#001f4d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -620,13 +620,23 @@
         }
     }
 
-    // WebKit Bridge Native Interface to dismiss the iOS screen
+    // Smart hybrid fallback close logic optimized for browser-based redirections
     function closeWebView() {
+        // 1. Try standard browser history navigation first (programmatic back-swipe)
+        if (window.history && window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        // 2. Fallback to custom Native handlers if your custom app shell injects them
         if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.closeHandler) {
             window.webkit.messageHandlers.closeHandler.postMessage("close");
-        } else {
-            console.log("Webkit message handler 'closeHandler' not detected. This close action executes natively inside your iOS App.");
+            return;
         }
+
+        // 3. Ultimate Fallback: redirect back to your app's home or referring URL
+        const fallbackTarget = document.referrer || window.location.origin || "/";
+        window.location.href = fallbackTarget;
     }
 
     // Init & Timers
