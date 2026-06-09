@@ -2,651 +2,150 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Tbay Bonus Challenge - Mobile App View</title>
-    <link rel="icon" href="data:,">
-    
-    <!-- Fonts: Lilita One for the bouncy gamified headers, Nunito for highly legible body text -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Reward Quiz</title>
     <style>
-        :root {
-            --banner-blue-light: #4bb3ff;
-            --banner-blue-dark: #0073e6;
-            --text-dark-blue: #001f4d;
-            --banner-red: #e60000;
-            --banner-red-dark: #990000;
-            --banner-gold: #ffcc00;
-            --banner-gold-dark: #cc9900;
-        }
-
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--banner-blue-light);
-            /* Creating the sunburst ray sky effect dynamically to match CP7KuzmI0e.png */
-            background-image: 
-                radial-gradient(circle at top center, rgba(255,255,255,0.4) 0%, transparent 60%),
-                repeating-conic-gradient(from 0deg at 50% 0%, 
-                    #4bb3ff 0deg 10deg, 
-                    #33a6ff 10deg 20deg);
-            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 50px 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
             color: #333;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
-
-        /* Container designed specifically for vertical app embed - with safe area support for mobile notch spacing */
-        .app-embed-container {
-            width: 100%;
-            max-width: 480px; 
-            margin: 0 auto;
-            /* Combines device top safe area (notch space) with optimized offset to clear status bar overlap */
-            padding: calc(env(safe-area-inset-top, 0px) + 38px) 10px 40px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            text-align: center; /* Fixes child text layout engine bugs */
-            gap: 14px;
-            box-sizing: border-box;
-        }
-
-        .font-game {
-            font-family: 'Lilita One', cursive;
-            line-height: 1;
-            text-transform: uppercase;
-        }
-
-        /* "BONUS" text style - using dynamic viewport-aware clamp to prevent horizontal overflow */
-        .title-bonus {
-            color: white;
-            font-size: clamp(2.4rem, 12vw, 3.6rem);
-            -webkit-text-stroke: 2px var(--text-dark-blue);
-            text-shadow: 0px 4px 0px var(--text-dark-blue);
-            
-            /* Combined your negative bottom margin with auto-centering margins */
-            margin: 0 auto -10px auto; 
-            
-            position: relative;
-            z-index: 2;
-            transform: rotate(-2deg);
-            transform-origin: center;
-            
-            /* Changed from inline-block to table to allow centering without breaking text styles */
-            display: table; 
-            
-            /* Safety for mobile screens */
-            max-width: 95%; 
-            box-sizing: border-box;
-        }
-
-        /* "CHALLENGE" text style - scaled responsively */
-        .title-challenge {
-            color: var(--banner-red);
-            font-size: clamp(2.2rem, 11vw, 3.2rem);
-            -webkit-text-stroke: 2.5px white;
-            text-shadow: 0px 5px 0px var(--banner-red-dark), 0px 8px 10px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 3;
-            transform: rotate(1deg);
-            transform-origin: center;
-            
-            /* Changed from inline-block to table to allow centering while protecting font rendering */
-            display: table; 
-            
-            /* Added auto margins to force horizontal centering */
-            margin: 0 auto; 
-            
-            /* Safety fallback to keep it mobile-friendly */
-            max-width: 95%;
-            box-sizing: border-box;
-        }
-
-        /* The Gold POINTS text style - responsive scaling to prevent breaking layout lines */
-        .title-gold {
-            color: var(--banner-gold);
-            font-size: clamp(3rem, 15vw, 4.4rem);
-            -webkit-text-stroke: 2px var(--text-dark-blue);
-            text-shadow: 
-                0px 2px 0px var(--banner-gold-dark),
-                0px 6px 0px var(--text-dark-blue), 
-                0px 10px 15px rgba(0,0,0,0.4);
-            letter-spacing: 1px;
-        }
-
-        .title-gold-small {
-            font-size: clamp(1.2rem, 6vw, 1.8rem);
-            color: white;
-            -webkit-text-stroke: 1.5px var(--text-dark-blue);
-            text-shadow: 0px 3px 0px var(--text-dark-blue);
-            vertical-align: text-bottom;
-            margin-left: 4px;
-        }
-
-        /* Red Ribbon Date Pill - designed to wrap safely on small displays */
-        .red-ribbon {
-            background: linear-gradient(to bottom, #ff1a1a, #cc0000);
-            color: white;
-            font-weight: 900;
-            font-size: clamp(0.7rem, 3.2vw, 0.85rem);
-            padding: 8px 18px;
-            border-radius: 4px;
-            position: relative;
-            
-            /* Changed to block so auto margins work */
-            display: block; 
-            
-            /* Added auto left/right margins to force perfect horizontal centering */
-            margin: 10px auto 0 auto; 
-            
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            border: 1px solid #ff4d4d;
-            letter-spacing: 0.5px;
-            
-            /* This already prevents the ribbon from breaking on small screens */
-            max-width: 90%; 
-            box-sizing: border-box;
-            text-align: center;
-        }
-        
-        /* Ribbon tails */
-        .red-ribbon::before, .red-ribbon::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            bottom: 5px;
-            width: 12px;
-            background: #990000;
-            z-index: -1;
-        }
-        .red-ribbon::before { left: -6px; transform: skewY(15deg); border-radius: 4px 0 0 4px; }
-        .red-ribbon::after { right: -6px; transform: skewY(-15deg); border-radius: 0 4px 4px 0; }
-
-        /* Mobile Game-Style Cards */
-        .game-card {
-            background: white;
-            border-radius: 18px;
-            padding: 16px 12px;
-            border: 3px solid white;
-            box-shadow: 
-                inset 0 -6px 0px rgba(0,0,0,0.05), /* Inner bottom shadow for 3D block feel */
-                0 8px 16px rgba(0,31,77,0.15); /* Outer drop shadow */
-            position: relative;
-            box-sizing: border-box;
-            width: 100%; /* Ensures they expand fully within the centered layout */
-        }
-
-        @media(min-width: 360px) {
-            .game-card {
-                padding: 20px 16px;
-            }
-        }
-
-        .game-card-blue {
-            background: #e6f5ff;
-            border-color: #b3e0ff;
-        }
-
-        .game-card-yellow {
-            background: #fffcf0;
-            border-color: #ffeba3;
-        }
-
-        .game-card-green {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-        }
-
-        /* Status Tag */
-        .status-tag {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            padding: 4px 16px;
-            border-radius: 99px;
-            font-family: 'Lilita One', cursive;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            border: 2px solid white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            white-space: nowrap;
-            z-index: 10;
-        }
-        .status-yet { background: var(--banner-blue-dark); }
-        .status-on { background: #00cc44; }
-        .status-comp { background: var(--banner-red); }
-
-        .vendor-badge {
-            background: var(--text-dark-blue);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-
-        .vendor-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            object-fit: cover;
-            background: white;
-        }
-
-        /* Tier blocks */
-        .tier-block {
-            background: white;
-            border-radius: 12px;
-            border: 2px solid #f0f0f0;
-            margin-bottom: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .tier-header {
-            background: #f8f9fa;
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            font-weight: 900;
-            color: #666;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .tier-body {
-            padding: 10px 12px;
-            text-align: center;
-        }
-        .tier-reward {
-            font-family: 'Lilita One', cursive;
-            color: var(--banner-red);
-            font-size: 1.4rem;
-            line-height: 1.2;
-        }
-        .tier-label {
-            font-size: 0.65rem;
-            font-weight: 900;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        /* Progress Bar */
-        .progress-track {
-            background: #e0e0e0;
-            border-radius: 99px;
-            height: 18px;
-            width: 100%;
-            overflow: hidden;
-            border: 2px solid #f5f5f5;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .progress-fill {
-            background: linear-gradient(90deg, #ff9900, #ff3300);
-            height: 100%;
-            border-radius: 99px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .coupon-box {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 2px dashed #28a745;
+            display: none;
+            font-size: 18px;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Floating Native-Style Close/Back Button (Pushed further down to stay safe from standard notification/status bar overlays) -->
-    <button onclick="closeWebView()" class="fixed right-3 z-50 flex items-center justify-center w-9 h-9 bg-white/80 backdrop-blur-md rounded-full shadow-md border border-white/50 active:scale-90 transition-transform select-none" style="top: calc(env(safe-area-inset-top, 0px) + 24px);" aria-label="Close page">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 text-[#001f4d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    </button>
-
-<div class="app-embed-container">
-    
-    <!-- Header Section - Perfectly Centered Grid with zero clipping and stacked 2-line layout -->
-    <header class="w-full flex flex-col items-center justify-center text-center mt-3 mb-2 px-2 box-border select-none">
-        <!-- 1. Top Mini Subtitle -->
-        <p class="text-[10px] sm:text-[11px] font-black tracking-widest text-blue-950 uppercase drop-shadow-sm mb-2 text-center w-full">
-            COMPLETE TIERS. UNLOCK REWARDS.
-        </p>
-
-        <!-- 2. Two-Line Stacked Title (Guaranteed layout matching CP7KuzmI0e.png) -->
-        <div class="w-full flex flex-col items-center justify-center text-center">
-            <div class="w-full flex justify-center mb-1 text-center">
-                <span class="font-game title-bonus text-center">BONUS</span>
-            </div>
-            <div class="w-full flex justify-center text-center">
-                <span class="font-game title-challenge text-center">CHALLENGE</span>
-            </div>
-        </div>
+    <div class="container">
+        <h2>Daily Quiz</h2>
         
-        <!-- 3. Centered Date Ribbon (Local Timezone Conversion) -->
-        <div class="w-full flex justify-center mt-3 text-center">
-            <div class="relative bg-gradient-to-b from-[#ff1a1a] to-[#cc0000] text-white font-black text-xs sm:text-sm px-6 py-2.5 rounded-lg shadow-md border border-[#ff4d4d] tracking-wider text-center max-w-[90%] flex items-center justify-center gap-1.5">
-                <!-- Decorative ribbon fold tails positioned safely inside container space -->
-                <div class="absolute left-[-6px] top-[4px] bottom-[4px] w-[10px] bg-[#990000] rounded-l-md -z-10 transform -skew-y-[12deg]"></div>
-                <div class="absolute right-[-6px] top-[4px] bottom-[4px] w-[10px] bg-[#990000] rounded-r-md -z-10 transform skew-y-[12deg]"></div>
-                <span id="localDateDisplay" class="truncate text-center">🗓️ CALCULATING TIME...</span>
-            </div>
-        </div>
+        <p id="questionText">Loading today's question...</p>
         
-        <!-- 4. Center Ribbon Subtext Pill (Dark Blue Banner matching CP7KuzmI0e.png) -->
-        <div class="w-full flex justify-center mt-4 px-2 text-center">
-            <div class="bg-[#001f4d] border border-[#003380] rounded-full py-1.5 px-4 flex items-center justify-center gap-2 shadow-md max-w-[95%] text-center">
-                <span class="text-xs">🎁</span>
-                <span class="text-[9px] sm:text-[10px] font-black tracking-wider text-white uppercase text-center">
-                    COMPLETE TIERS. <span class="text-[#ffcc00]">UNLOCK REWARDS.</span> EARN MORE!
-                </span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Live dynamic tracker card connected to Google Sheet A1/A2 -->
-    <div class="game-card game-card-blue">
-        <div class="status-tag status-yet" id="campaignStatus">YET TO START</div>
+        <input type="text" id="answerInput" placeholder="Type your answer here...">
+        <br>
+        <button id="submitBtn" onclick="submitAnswer()">Submit Answer</button>
         
-        <div class="text-center mt-3">
-            <h2 class="font-game text-lg sm:text-xl text-blue-900 tracking-wide mb-1">REMAINING PRIZE POOL</h2>
+        <p id="message"></p>
+        <div id="couponBox" class="coupon-box"></div>
+    </div>
+
+    <script>
+        // Your live Google Apps Script URL
+        const API_URL = "https://script.google.com/macros/s/AKfycby10zZc4DrVexl1rPW6Gh-iSyVboTxM3T02H5p1tkpLV8XBHAZjOQGYFMviO9dHp0Xbbg/exec";
+
+        // Fetch today's question from Google Sheets when the page loads
+        window.onload = function() {
+            const questionEl = document.getElementById('questionText');
             
-            <div class="flex justify-center items-end" id="poolDisplay">
-                <span class="font-game title-gold">400</span>
-                <span class="font-game title-gold-small">PTS LEFT!</span>
-            </div>
-            
-            <div class="mt-3 px-1">
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill" style="width: 100%;"></div>
-                </div>
-                <div class="flex justify-between text-[10px] sm:text-[11px] font-black mt-2 text-gray-500 uppercase gap-2">
-                    <span id="claimedText" class="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex-1 text-center truncate">0 CLAIMED</span>
-                    <span id="leftText" class="text-red-600 bg-red-100 border border-red-200 px-2 py-1 rounded-md flex-1 text-center truncate">400 LEFT</span>
-                </div>
-            </div>
-        </div>
-    </div>
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.question) {
+                        questionEl.innerText = data.question;
+                    }
+                })
+                .catch(error => {
+                    questionEl.innerText = "Error loading question. Please refresh.";
+                });
+        };
 
-    <!-- How to Earn Rewards Simple Steps (Placed directly below Prize Pool) -->
-    <div class="game-card game-card-green p-4">
-        <h3 class="font-game text-base sm:text-lg text-emerald-950 leading-none mb-3 tracking-wide flex items-center gap-1.5">
-            <span>🚀</span> HOW TO EARN REWARDS
-        </h3>
-        <div class="space-y-3 text-xs font-bold text-emerald-900">
-            <div class="flex items-start gap-2.5">
-                <div class="bg-emerald-200 text-emerald-800 w-5 h-5 rounded-full flex items-center justify-center font-black flex-shrink-0">1</div>
-                <p class="leading-relaxed"><strong class="text-emerald-950">Choose a Vendor:</strong> Open a trade with Kardbaba, Nyland, DavidCard, or Pikachu.</p>
-            </div>
-            <div class="flex items-start gap-2.5">
-                <div class="bg-emerald-200 text-emerald-800 w-5 h-5 rounded-full flex items-center justify-center font-black flex-shrink-0">2</div>
-                <p class="leading-relaxed"><strong class="text-emerald-950">Hit a Trade Tier:</strong> Reach the minimum point target for that specific vendor during the event.</p>
-            </div>
-            <div class="flex items-start gap-2.5">
-                <div class="bg-emerald-200 text-emerald-800 w-5 h-5 rounded-full flex items-center justify-center font-black flex-shrink-0">3</div>
-                <p class="leading-relaxed"><strong class="text-emerald-950">Get Rewarded:</strong> Your extra bonus points are calculated and distributed automatically the following day!</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Kardbaba official partner card -->
-    <div class="game-card pb-3">
-        <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-            <img src="https://mcusercontent.com/4ceda90aa48260f0c3c397068/images/2d81b703-46dd-0eb7-ed18-eaa2c33c2599.jpg" alt="Kardbaba" class="vendor-avatar">
-            <div>
-                <div class="vendor-badge" style="background: #f97316;">Official Partner</div>
-                <h3 class="font-black text-lg sm:text-xl text-gray-800 leading-none">Kardbaba</h3>
-            </div>
-        </div>
-
-        <div class="tier-block">
-            <div class="tier-header text-orange-600">
-                <span>TIER 1</span>
-                <span>Traded ≥ 4,900</span>
-            </div>
-            <div class="tier-body">
-                <div class="tier-label">UNLOCKS REWARD</div>
-                <div class="tier-reward">+15 POINTS</div>
-            </div>
-        </div>
-
-        <div class="tier-block">
-            <div class="tier-header text-orange-600">
-                <span>TIER 2</span>
-                <span>Traded ≥ 7,900</span>
-            </div>
-            <div class="tier-body">
-                <div class="tier-label">UNLOCKS ADDITIONAL</div>
-                <div class="tier-reward">+20 POINTS</div>
-            </div>
-        </div>
-
-        <div class="tier-block mb-0">
-            <div class="tier-header text-orange-600">
-                <span>TIER 3</span>
-                <span>Traded ≥ 11,900</span>
-            </div>
-            <div class="tier-body bg-orange-50">
-                <div class="tier-label text-orange-800">UNLOCKS MAXIMUM</div>
-                <div class="tier-reward text-orange-600">+25 POINTS</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Group partners card -->
-    <div class="game-card pb-3">
-        <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-            <div class="flex -space-x-3">
-                <img src="https://mcusercontent.com/4ceda90aa48260f0c3c397068/_thumbs/4fe14310-99bf-d7b0-2b8b-118aca927f9c.jpg" alt="Nyland" class="vendor-avatar z-30">
-                <img src="https://mcusercontent.com/4ceda90aa48260f0c3c397068/_thumbs/db4b7284-1f61-6e46-b032-74748b7d9a24.png" alt="DavidCard" class="vendor-avatar z-20">
-                <img src="https://mcusercontent.com/4ceda90aa48260f0c3c397068/_thumbs/6f000843-f8bf-6d72-0aa5-c3c36066cc8d.jpg" alt="Pikachu" class="vendor-avatar z-10">
-            </div>
-            <div class="pl-2">
-                <div class="vendor-badge" style="background: #3b82f6;">Co-Partners</div>
-                <h3 class="font-black text-xs sm:text-sm text-gray-800 leading-tight mt-0.5">Nyland, David, Pikachu</h3>
-            </div>
-        </div>
-
-        <div class="tier-block">
-            <div class="tier-header text-blue-600">
-                <span>TIER 1</span>
-                <span>Traded ≥ 3,000</span>
-            </div>
-            <div class="tier-body">
-                <div class="tier-label">UNLOCKS REWARD</div>
-                <div class="tier-reward">+10 POINTS</div>
-            </div>
-        </div>
-
-        <div class="tier-block">
-            <div class="tier-header text-blue-600">
-                <span>TIER 2</span>
-                <span>Traded ≥ 5,000</span>
-            </div>
-            <div class="tier-body">
-                <div class="tier-label">UNLOCKS ADDITIONAL</div>
-                <div class="tier-reward">+15 POINTS</div>
-            </div>
-        </div>
-
-        <div class="tier-block mb-0">
-            <div class="tier-header text-blue-600">
-                <span>TIER 3</span>
-                <span>Traded ≥ 8,000</span>
-            </div>
-            <div class="tier-body bg-blue-50">
-                <div class="tier-label text-blue-800">UNLOCKS MAXIMUM</div>
-                <div class="tier-reward text-blue-600">+20 POINTS</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Single-vendor guidelines (Placed below reward cards) -->
-    <div class="game-card game-card-yellow p-4">
-        <div>
-            <h3 class="font-game text-base sm:text-lg text-amber-950 leading-none mb-2 tracking-wide flex items-center gap-1.5 justify-center sm:justify-start">
-                <span>💡</span> SINGLE-VENDOR GUIDE
-            </h3>
-            <p class="text-xs font-bold text-amber-900 leading-relaxed text-center sm:text-left">
-                To unlock a reward tier, your trading points must be accumulated through <span class="underline decoration-2 decoration-amber-500 font-black">one single vendor</span>. Points from different vendors are calculated independently.
-            </p>
-            
-            <!-- Highly visible Eligible Vendors row -->
-            <div class="mt-3 pt-3 border-t border-amber-200/50 flex flex-wrap gap-1.5 items-center justify-center sm:justify-start">
-                <span class="text-[9px] sm:text-[10px] font-black text-amber-950 uppercase tracking-wider mr-1">Eligible Campaign Vendors:</span>
-                <span class="bg-orange-100 text-orange-800 text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full border border-orange-200">Kardbaba</span>
-                <span class="bg-blue-100 text-blue-800 text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full border border-blue-200">Nyland</span>
-                <span class="bg-blue-100 text-blue-800 text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full border border-blue-200">DavidCard</span>
-                <span class="bg-blue-100 text-blue-800 text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full border border-blue-200">Pikachu</span>
-            </div>
-
-            <div class="mt-3 bg-white/90 rounded-xl p-2.5 border border-amber-200 shadow-sm text-center sm:text-left">
-                <p class="text-[10px] sm:text-[11px] font-bold text-amber-950 leading-snug">
-                    <span class="text-emerald-600 font-black">⭐ MULTI-REWARD ADVANTAGE:</span> Meet target tiers for both <span class="text-orange-600">Kardbaba</span> and <span class="text-blue-600">Nyland</span> separately? You can claim rewards for <strong class="text-emerald-600">BOTH</strong> challenges!
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom descriptive terms -->
-    <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-sm border border-white/50 w-full">
-        <h4 class="font-black text-xs text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-2 mb-2 text-center sm:text-left">
-            Distribution & Terms
-        </h4>
-        <ul class="text-[10px] sm:text-[11px] font-bold text-gray-600 space-y-2 pl-3 list-disc">
-            <li>Rewards distributed dynamically the <strong class="text-red-500">following day</strong> once tiers are reached.</li>
-            <li>First-come, first-served based on successful trades and timestamps.</li>
-            <li>If the 400 Points overall budget is exhausted, the challenge closes instantly.</li>
-        </ul>
-    </div>
-
-</div>
-
-<script>
-    // 1. Configuration - Campaign Dates (GMT+1)
-    const CAMPAIGN_START = "2026-06-09T00:00:00+01:00"; 
-    const CAMPAIGN_END = "2026-06-15T23:59:59+01:00";   
-    const MAX_POOL = 400;
-    
-    // 2. Google Sheet CSV URL
-    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSP-wKAbHPiWDFHGId00ePb8H9AFUooMdKBY74ixp0xyompISPrHl-r7wyOgCzmMs6nOSONvOvbYw3o/pub?output=csv"; 
-
-    // Convert GMT+1 date strings to the User's Local Time string format
-    function formatToLocalString(dateString) {
-        const d = new Date(dateString);
-        const day = d.getDate();
-        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-        const month = monthNames[d.getMonth()];
-        const hours = String(d.getHours()).padStart(2, '0');
-        const minutes = String(d.getMinutes()).padStart(2, '0');
-        return `${day} ${month}, ${hours}:${minutes}`;
-    }
-
-    // Update the Date Ribbon and Campaign Status based on current timestamp
-    function updateTimeAndStatus() {
-        const localStartStr = formatToLocalString(CAMPAIGN_START);
-        const localEndStr = formatToLocalString(CAMPAIGN_END);
-        document.getElementById('localDateDisplay').innerText = `🗓️ ${localStartStr} - ${localEndStr} (LOCAL)`;
-
-        const startTime = new Date(CAMPAIGN_START).getTime();
-        const endTime = new Date(CAMPAIGN_END).getTime();
-        const now = Date.now();
-        const statusEl = document.getElementById('campaignStatus');
-
-        statusEl.classList.remove('status-yet', 'status-on', 'status-comp');
-
-        if (now < startTime) {
-            statusEl.innerText = "YET TO START";
-            statusEl.classList.add('status-yet');
-        } else if (now >= startTime && now <= endTime) {
-            statusEl.innerText = "LIVE NOW";
-            statusEl.classList.add('status-on');
-        } else {
-            statusEl.innerText = "COMPLETED";
-            statusEl.classList.add('status-comp');
+        // Generate or retrieve the User ID from local storage
+        function getOrGenerateUserId() {
+            let userId = localStorage.getItem('daily_quiz_user_id');
+            if (!userId) {
+                userId = 'user_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+                localStorage.setItem('daily_quiz_user_id', userId);
+            }
+            return userId;
         }
-    }
 
-    // Fetch the live pool from A1/A2 in Google Sheets
-    async function updatePrizePool() {
-        const poolEl = document.getElementById('poolDisplay');
-        const claimedEl = document.getElementById('claimedText');
-        const leftEl = document.getElementById('leftText');
-        const progressFill = document.getElementById('progressFill');
+        // Send the user's answer to Google Sheets to check if it's correct
+        function submitAnswer() {
+            const answer = document.getElementById('answerInput').value;
+            const messageEl = document.getElementById('message');
+            const submitBtn = document.getElementById('submitBtn');
+            const couponBox = document.getElementById('couponBox');
+            const userId = getOrGenerateUserId();
 
-        try {
-            const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: "no-store" });
-            if (!response.ok) throw new Error("Fetch failed");
-            
-            const csvText = await response.text();
-            const rows = csvText.split('\n');
-            if (rows.length < 2) return;
-
-            // Strict column matching for "RemainingPool", cleaning quotes if any
-            const cellA1 = rows[0].split(',')[0].trim().replace(/\r/g, '').replace(/^"|"$/g, '');
-            const cellA2 = rows[1].split(',')[0].trim().replace(/\r/g, '').replace(/^"|"$/g, '');
-            
-            if (cellA1.toLowerCase() !== "remainingpool") {
-                console.warn("Header check mismatch: A1 is not 'RemainingPool'. Found: " + cellA1);
+            if (answer.trim() === "") {
+                messageEl.innerText = "Please enter an answer first!";
+                messageEl.style.color = "red";
+                return;
             }
 
-            let currentPool = parseFloat(cellA2);
+            // Lock the button so they don't click it twice
+            submitBtn.disabled = true;
+            messageEl.style.color = "black";
+            messageEl.innerText = "Checking your answer...";
+            couponBox.style.display = "none";
 
-            if (!isNaN(currentPool)) {
-                currentPool = Math.max(0, Math.min(MAX_POOL, currentPool));
+            // Send the data via POST
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ userId: userId, answer: answer })
+            })
+            .then(response => response.json())
+            .then(data => {
+                submitBtn.disabled = false; // Unlock button
                 
-                // Update 3D Number HTML to clearly highlight "PTS LEFT!"
-                poolEl.innerHTML = `
-                    <span class="font-game title-gold">${currentPool}</span>
-                    <span class="font-game title-gold-small">PTS LEFT!</span>
-                `;
-                
-                // Update Bar Text
-                const claimedAmount = MAX_POOL - currentPool;
-                claimedEl.innerText = `${claimedAmount} CLAIMED`;
-                leftEl.innerText = `${currentPool} LEFT`;
-
-                // Update Progress Bar width
-                const percentRemaining = (currentPool / MAX_POOL) * 100;
-                progressFill.style.width = `${percentRemaining}%`;
-            }
-        } catch (error) {
-            console.error("Pool fetch error:", error);
+                if (data.success) {
+                    messageEl.innerText = "🎉 " + data.message;
+                    messageEl.style.color = "green";
+                    couponBox.innerText = data.couponCode;
+                    couponBox.style.display = "block";
+                } else {
+                    messageEl.innerText = "❌ " + data.message;
+                    messageEl.style.color = "red";
+                }
+            })
+            .catch(error => {
+                submitBtn.disabled = false;
+                messageEl.innerText = "Something went wrong. Please try again.";
+                messageEl.style.color = "red";
+            });
         }
-    }
-
-    // Smart hybrid fallback close logic optimized for browser-based redirections
-    function closeWebView() {
-        // 1. Try standard browser history navigation first (programmatic back-swipe)
-        if (window.history && window.history.length > 1) {
-            window.history.back();
-            return;
-        }
-
-        // 2. Fallback to custom Native handlers if your custom app shell injects them
-        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.closeHandler) {
-            window.webkit.messageHandlers.closeHandler.postMessage("close");
-            return;
-        }
-
-        // 3. Ultimate Fallback: redirect back to your app's home or referring URL
-        const fallbackTarget = document.referrer || window.location.origin || "/";
-        window.location.href = fallbackTarget;
-    }
-
-    // Init & Timers
-    window.onload = () => {
-        updateTimeAndStatus();
-        updatePrizePool();
-        setInterval(updateTimeAndStatus, 60000); 
-        setInterval(updatePrizePool, 300000); 
-    };
-</script>
-
+    </script>
 </body>
 </html>
